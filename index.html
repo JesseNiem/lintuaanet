@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lintutesti</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        img {
+            width: 300px;
+            height: auto;
+            border: 2px solid #000;
+            margin-bottom: 20px;
+        }
+        button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Lintutesti</h1>
+    <div id="quiz">
+        <img id="birdImage" src="" alt="Linnun kuva">
+        <div id="options">
+            <button onclick="checkAnswer(0)"></button>
+            <button onclick="checkAnswer(1)"></button>
+            <button onclick="checkAnswer(2)"></button>
+        </div>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        const birds = [
+            "haapana", "isokoskelo", "jouhisorsa", "kaakkuri", "kuikka",
+            "laulujoutsen", "merihanhi", "metsähanhi", "pilkkasiipi",
+            "härkälintu", "sinisorsa", "tavi", "telkkä", "tukkakoskelo",
+            "tukkasotka", "uivelo", "isokuovi", "kapustarinta", "liro",
+            "rantasipi", "suokukko", "valkoviklo", "taivaanvuohi", 
+            "töyhtöhyyppä", "kurki", "kalasääski", "kanahaukka",
+            "maakotka", "merikotka", "muuttohaukka", "pyy", "metso",
+            "teeri", "riekko", "fasaani", "helmipöllö", "lapinpöllö",
+            "suopöllö", "hiiripöllö", "varpuspöllö", "huuhkaja"
+        ];
+
+        let currentBird;
+        let correctAnswerIndex;
+
+        function getRandomBird() {
+            return birds[Math.floor(Math.random() * birds.length)];
+        }
+
+        function getRandomOptions(correctBird) {
+            const options = [correctBird];
+            while (options.length < 3) {
+                const randomBird = getRandomBird();
+                if (!options.includes(randomBird)) {
+                    options.push(randomBird);
+                }
+            }
+            return options.sort(() => Math.random() - 0.5);
+        }
+
+        function getImageUrl(birdName) {
+            return `https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/${birdName.replace(/ /g, "_")}.jpg/400px-${birdName.replace(/ /g, "_")}.jpg`;
+        }
+
+        function loadQuiz() {
+            currentBird = getRandomBird();
+            const options = getRandomOptions(currentBird);
+            correctAnswerIndex = options.indexOf(currentBird);
+
+            let imageUrl = getImageUrl(currentBird);
+            document.getElementById('birdImage').src = imageUrl;
+            document.getElementById('birdImage').onerror = function() {
+                this.src = "https://via.placeholder.com/300?text=Ei+kuvaa"; // Varmuuden vuoksi varakuva
+            };
+
+            document.getElementById('options').children[0].textContent = options[0];
+            document.getElementById('options').children[1].textContent = options[1];
+            document.getElementById('options').children[2].textContent = options[2];
+            document.getElementById('result').textContent = '';
+        }
+
+        function checkAnswer(selectedIndex) {
+            if (selectedIndex === correctAnswerIndex) {
+                document.getElementById('result').textContent = 'Oikein!';
+                setTimeout(loadQuiz, 1000);
+            } else {
+                document.getElementById('result').textContent = 'Väärin!';
+            }
+        }
+
+        window.onload = loadQuiz;
+    </script>
+</body>
+</html>
