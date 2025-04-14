@@ -30,43 +30,67 @@
   </style>
 </head>
 <body>
-  <h1 id="title" style="cursor: pointer;">Lintuäänet LAAT25</h1>
-
-  <audio id="birdAudio" controls style="display:none;"></audio>
-  <div id="options" style="display:none;">
+  <h1>Lintuäänet LAAT25</h1>
+  <audio id="birdAudio" controls></audio>
+  <div id="options">
     <button onclick="checkAnswer(0)"></button>
     <button onclick="checkAnswer(1)"></button>
     <button onclick="checkAnswer(2)"></button>
   </div>
-
-  <p id="instruction" style="display:none;">Voit valita vaihtoehdoista tai kirjoittaa linnun nimen suoraan tähän:</p>
-  <input type="text" id="answerInput" placeholder="Kirjoita linnun nimi ja paina Enter" style="display:none;">
+  <p id="instruction">Voit valita vaihtoehdoista tai kirjoittaa linnun nimen suoraan tähän:</p>
+  <input type="text" id="answerInput" placeholder="Kirjoita linnun nimi ja paina Enter">
   <p id="result"></p>
-  <p id="score" style="display:none;"></p>
+  <p id="score"></p>
 
   <script>
     const birdSounds = {
-      "kaakkuri": "gavste.mp3", "kuikka": "gavarb.mp3", "laulujoutsen": "cygcyg.mp3",
-      "metsähanhi": "ansfab.mp3", "härkälintu": "podcri.mp3", "sinisorsa": "anapla.mp3",
-      "telkkä": "buccla.mp3", "isokuovi": "numarqu.mp3", "liro": "trigla.mp3",
-      "taivaanvuohi": "capgall.mp3", "töyhtöhyyppä": "vanvan.mp3", "kurki": "grugru.mp3",
-      "pyy": "bonbon.mp3", "metso": "tetrur.mp3", "teeri": "lyrlyr.mp3",
-      "riekko": "laglag.mp3", "helmipöllö": "aegfun.mp3", "varpuspöllö": "glapass.mp3",
-      "huuhkaja": "bubbub.mp3", "palokärki": "drymar.mp3", "käpytikka": "denmaj.mp3",
-      "käki": "cuccan.mp3", "sepelkyyhky": "colpal.mp3", "harmaalokki": "lararg.mp3",
-      "naurulokki": "larrid.mp3", "kalatiira": "sterhi.mp3", "korppi": "corcor.mp3",
-      "närhi": "gargla.mp3", "mustarastas": "turmer.mp3", "laulurastas": "turtor.mp3",
-      "punakylkirastas": "tueril.mp3", "sinitiainen": "parcae.mp3", "hömötiainen": "parmon.mp3",
-      "talitiainen": "parmaj.mp3", "haarapääsky": "hirrus.mp3", "järripeippo": "frimon.mp3",
-      "peippo": "fricoe.mp3", "viherpeippo": "chlchl.mp3", "keltasirkku": "embcit.mp3",
-      "kirjosieppo": "ficalb.mp3", "leppälintu": "phopho.mp3", "pajulintu": "phycol.mp3",
+      "kaakkuri": "gavste.mp3",
+      "kuikka": "gavarb.mp3",
+      "laulujoutsen": "cygcyg.mp3",
+      "metsähanhi": "ansfab.mp3",
+      "härkälintu": "podcri.mp3",
+      "sinisorsa": "anapla.mp3",
+      "telkkä": "buccla.mp3",
+      "isokuovi": "numarqu.mp3",
+      "liro": "trigla.mp3",
+      "taivaanvuohi": "capgall.mp3",
+      "töyhtöhyyppä": "vanvan.mp3",
+      "kurki": "grugru.mp3",
+      "pyy": "bonbon.mp3",
+      "metso": "tetrur.mp3",
+      "teeri": "lyrlyr.mp3",
+      "riekko": "laglag.mp3",
+      "helmipöllö": "aegfun.mp3",
+      "varpuspöllö": "glapass.mp3",
+      "huuhkaja": "bubbub.mp3",
+      "palokärki": "drymar.mp3",
+      "käpytikka": "denmaj.mp3",
+      "käki": "cuccan.mp3",
+      "sepelkyyhky": "colpal.mp3",
+      "harmaalokki": "lararg.mp3",
+      "naurulokki": "larrid.mp3",
+      "kalatiira": "sterhi.mp3",
+      "korppi": "corcor.mp3",
+      "närhi": "gargla.mp3",
+      "mustarastas": "turmer.mp3",
+      "laulurastas": "turtor.mp3",
+      "punakylkirastas": "tueril.mp3",
+      "sinitiainen": "parcae.mp3",
+      "hömötiainen": "parmon.mp3",
+      "talitiainen": "parmaj.mp3",
+      "haarapääsky": "hirrus.mp3",
+      "järripeippo": "frimon.mp3",
+      "peippo": "fricoe.mp3",
+      "viherpeippo": "chlchl.mp3",
+      "keltasirkku": "embcit.mp3",
+      "kirjosieppo": "ficalb.mp3",
+      "leppälintu": "phopho.mp3",
+      "pajulintu": "phycol.mp3",
       "punatulkku": "pyropy.mp3"
     };
 
     const birds = Object.keys(birdSounds);
     let score = 0;
-    let correctCount = 0;
-    let wrongCount = 0;
     let index = 0;
     let shuffled = shuffle(birds);
     let correctAnswer = "";
@@ -81,22 +105,18 @@
 
     function loadNext() {
       if (index >= shuffled.length) {
-        document.getElementById('result').textContent =
-          `Valmis! Oikein: ${correctCount}, Väärin: ${wrongCount}, Yhteensä: ${shuffled.length}`;
+        document.getElementById('result').textContent = `Valmis! Sait ${score}/${shuffled.length} oikein.`;
         return;
       }
       correctAnswer = shuffled[index];
       const audio = document.getElementById('birdAudio');
       audio.src = `https://lportti-prod-audio.s3-eu-west-1.amazonaws.com/${birdSounds[correctAnswer]}`;
-      audio.load();
-      audio.play(); // Toista automaattisesti
 
       const choices = shuffle([correctAnswer, ...shuffle(birds.filter(b => b !== correctAnswer)).slice(0, 2)]);
       const buttons = document.getElementById('options').children;
       for (let i = 0; i < 3; i++) {
         buttons[i].textContent = choices[i];
       }
-
       document.getElementById('result').textContent = '';
       document.getElementById('score').textContent = `Kysymys ${index + 1}/${shuffled.length}`;
       document.getElementById('answerInput').value = '';
@@ -111,10 +131,8 @@
       if (answer === correctAnswer) {
         document.getElementById('result').textContent = 'WAUTSI HYVÄ!';
         score++;
-        correctCount++;
       } else {
         document.getElementById('result').textContent = `Väärin! Oikea vastaus oli: ${correctAnswer}`;
-        wrongCount++;
       }
       index++;
       setTimeout(loadNext, 1500);
@@ -126,14 +144,7 @@
       }
     });
 
-    document.getElementById('title').addEventListener('click', function() {
-      document.getElementById('options').style.display = 'block';
-      document.getElementById('birdAudio').style.display = 'block';
-      document.getElementById('instruction').style.display = 'block';
-      document.getElementById('answerInput').style.display = 'inline-block';
-      document.getElementById('score').style.display = 'block';
-      loadNext();
-    });
+    window.onload = loadNext;
   </script>
 </body>
 </html>
