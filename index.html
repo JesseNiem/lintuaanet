@@ -189,13 +189,17 @@
       document.getElementById('finalScore').textContent = `Pisteitä: ${score}`;
       
       if (score > 30 && !document.getElementById('secretMessage')) {
+        // Encoded: "Uskomatonta, yli 30 pistettä! Salasana on KURKIPOTKU, kerro se Jesselle."
+        const encoded = "VXNrb21hdG9udGEsIHlsaSAzMCBwaXN0ZXR0w6QhIFNhbGFzYW5hIG9uIEtVUktJUE9US1UsIGtlcnJvIHNlIEplc3NlbGxlLg==";
+        const decoded = atob(encoded);
+
         const message = document.createElement('p');
         message.id = 'secretMessage';
         message.style.marginTop = '30px';
         message.style.fontSize = '22px';
         message.style.color = 'green';
         message.style.fontWeight = 'bold';
-        message.textContent = 'Uskomatonta, yli 30 pistettä! Salasana on KURKIPOTKU, kerro se Jesselle.';
+        message.textContent = decoded;
         document.body.appendChild(message);
       }
     }
