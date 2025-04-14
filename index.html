@@ -62,7 +62,7 @@
 <body>
   <h1>Lintuäänet LAAT25</h1>
   <div id="backgroundMessage">OIKEIN!</div>
-  <audio id="birdAudio" controls></audio>
+  <audio id="birdAudio" controls autoplay loop></audio>
 
   <p id="instruction" onclick="showOptions()">Voit klikata tästä nähdäksesi vaihtoehdot (saat vain 0,5 pistettä)</p>
   <div id="options">
@@ -146,6 +146,8 @@
       correctAnswer = shuffled[index];
       const audio = document.getElementById('birdAudio');
       audio.src = `https://lportti-prod-audio.s3-eu-west-1.amazonaws.com/${birdSounds[correctAnswer]}`;
+      audio.load();
+      audio.play();
 
       const choices = shuffle([correctAnswer, ...shuffle(birds.filter(b => b !== correctAnswer)).slice(0, 2)]);
       const buttons = document.getElementById('options').children;
