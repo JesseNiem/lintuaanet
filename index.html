@@ -8,6 +8,8 @@
       font-family: Arial, sans-serif;
       text-align: center;
       padding: 30px;
+      position: relative;
+      overflow: hidden;
     }
     button {
       margin: 10px;
@@ -40,10 +42,26 @@
       font-size: 24px;
       font-weight: bold;
     }
+    #backgroundMessage {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 80px;
+      color: red;
+      opacity: 0;
+      z-index: 0;
+      transition: opacity 0.5s ease-in-out;
+      pointer-events: none;
+    }
+    body.show-background #backgroundMessage {
+      opacity: 0.2;
+    }
   </style>
 </head>
 <body>
   <h1>Lintuäänet LAAT25</h1>
+  <div id="backgroundMessage">OIKEIN!</div>
   <audio id="birdAudio" controls></audio>
 
   <p id="instruction" onclick="showOptions()">Voit klikata tästä nähdäksesi vaihtoehdot (saat vain 0,5 pistettä) tai kirjoittaa linnun nimen alle:</p>
@@ -140,6 +158,7 @@
       document.getElementById('answerInput').value = '';
       document.getElementById('options').style.display = 'none';
       optionsShown = false;
+      document.body.classList.remove('show-background');
     }
 
     function checkAnswer(selectedIndex) {
@@ -149,10 +168,12 @@
 
     function validate(answer, usedOptions = false) {
       if (answer === correctAnswer) {
-        document.getElementById('result').textContent = 'WAUTSI HYVÄ!';
+        document.getElementById('result').textContent = '';
+        document.body.classList.add('show-background');
         score += usedOptions ? 0.5 : 1;
       } else {
         document.getElementById('result').textContent = `Väärin! Oikea vastaus oli: ${correctAnswer}`;
+        document.body.classList.remove('show-background');
       }
       index++;
       updateScoreDisplay();
