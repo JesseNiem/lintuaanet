@@ -140,12 +140,12 @@
 
     function loadNext() {
       if (index >= shuffled.length) {
-        document.getElementById('result').textContent = `Valmis!`;
+        document.getElementById('result').textContent = Valmis!;
         return;
       }
       correctAnswer = shuffled[index];
       const audio = document.getElementById('birdAudio');
-      audio.src = `https://lportti-prod-audio.s3-eu-west-1.amazonaws.com/${birdSounds[correctAnswer]}`;
+      audio.src = https://lportti-prod-audio.s3-eu-west-1.amazonaws.com/${birdSounds[correctAnswer]};
 
       const choices = shuffle([correctAnswer, ...shuffle(birds.filter(b => b !== correctAnswer)).slice(0, 2)]);
       const buttons = document.getElementById('options').children;
@@ -154,7 +154,7 @@
       }
 
       document.getElementById('result').textContent = '';
-      document.getElementById('score').textContent = `Kysymys ${index + 1}/${shuffled.length}`;
+      document.getElementById('score').textContent = Kysymys ${index + 1}/${shuffled.length};
       document.getElementById('answerInput').value = '';
       document.getElementById('options').style.display = 'none';
       optionsShown = false;
@@ -172,7 +172,7 @@
         document.body.classList.add('show-background');
         score += usedOptions ? 0.5 : 1;
       } else {
-        document.getElementById('result').textContent = `Väärin! Oikea vastaus oli: ${correctAnswer}`;
+        document.getElementById('result').textContent = Väärin! Oikea vastaus oli: ${correctAnswer};
         document.body.classList.remove('show-background');
       }
       index++;
@@ -186,22 +186,7 @@
     }
 
     function updateScoreDisplay() {
-      document.getElementById('finalScore').textContent = `Pisteitä: ${score}`;
-      
-      if (score > 30 && !document.getElementById('secretMessage')) {
-        // Encoded: "Uskomatonta, yli 30 pistettä! Salasana on KURKIPOTKU, kerro se Jesselle."
-        const encoded = "VXNrb21hdG9udGEsIHlsaSAzMCBwaXN0ZXR0w6QhIFNhbGFzYW5hIG9uIEtVUktJUE9US1UsIGtlcnJvIHNlIEplc3NlbGxlLg==";
-        const decoded = atob(encoded);
-
-        const message = document.createElement('p');
-        message.id = 'secretMessage';
-        message.style.marginTop = '30px';
-        message.style.fontSize = '22px';
-        message.style.color = 'green';
-        message.style.fontWeight = 'bold';
-        message.textContent = decoded;
-        document.body.appendChild(message);
-      }
+      document.getElementById('finalScore').textContent = Pisteitä: ${score};
     }
 
     document.getElementById('answerInput').addEventListener('keydown', function(e) {
