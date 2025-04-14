@@ -187,6 +187,17 @@
 
     function updateScoreDisplay() {
       document.getElementById('finalScore').textContent = `Pisteitä: ${score}`;
+      
+      if (score > 30 && !document.getElementById('secretMessage')) {
+        const message = document.createElement('p');
+        message.id = 'secretMessage';
+        message.style.marginTop = '30px';
+        message.style.fontSize = '22px';
+        message.style.color = 'green';
+        message.style.fontWeight = 'bold';
+        message.textContent = 'Uskomatonta, yli 30 pistettä! Salasana on KURKIPOTKU, kerro se Jesselle.';
+        document.body.appendChild(message);
+      }
     }
 
     document.getElementById('answerInput').addEventListener('keydown', function(e) {
