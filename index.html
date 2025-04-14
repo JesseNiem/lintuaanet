@@ -27,17 +27,27 @@
       margin-top: 20px;
       font-size: 20px;
     }
+    #options {
+      display: none; /* Hidden by default */
+    }
+    #instruction {
+      cursor: pointer;
+      color: blue;
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
   <h1>Lintuäänet LAAT25</h1>
   <audio id="birdAudio" controls></audio>
+  
+  <p id="instruction" onclick="showOptions()">Voit klikata tästä nähdäksesi vaihtoehdot tai kirjoittaa linnun nimen suoraan tähän:</p>
   <div id="options">
     <button onclick="checkAnswer(0)"></button>
     <button onclick="checkAnswer(1)"></button>
     <button onclick="checkAnswer(2)"></button>
   </div>
-  <p id="instruction">Voit valita vaihtoehdoista tai kirjoittaa linnun nimen suoraan tähän:</p>
+
   <input type="text" id="answerInput" placeholder="Kirjoita linnun nimi ja paina Enter">
   <p id="result"></p>
   <p id="score"></p>
@@ -120,6 +130,7 @@
       document.getElementById('result').textContent = '';
       document.getElementById('score').textContent = `Kysymys ${index + 1}/${shuffled.length}`;
       document.getElementById('answerInput').value = '';
+      document.getElementById('options').style.display = 'none'; // Hide again for next question
     }
 
     function checkAnswer(selectedIndex) {
@@ -136,6 +147,10 @@
       }
       index++;
       setTimeout(loadNext, 1500);
+    }
+
+    function showOptions() {
+      document.getElementById('options').style.display = 'block';
     }
 
     document.getElementById('answerInput').addEventListener('keydown', function(e) {
