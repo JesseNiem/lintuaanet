@@ -28,20 +28,25 @@
       font-size: 20px;
     }
     #options {
-      display: none; /* Hidden by default */
+      display: none;
     }
     #instruction {
       cursor: pointer;
       color: blue;
       text-decoration: underline;
     }
+    #finalScore {
+      margin-top: 40px;
+      font-size: 24px;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
   <h1>Lintuäänet LAAT25</h1>
   <audio id="birdAudio" controls></audio>
-  
-  <p id="instruction" onclick="showOptions()">Voit klikata tästä nähdäksesi vaihtoehdot tai kirjoittaa linnun nimen suoraan tähän:</p>
+
+  <p id="instruction" onclick="showOptions()">Voit klikata tästä nähdäksesi vaihtoehdot (saat vain 0,5 pistettä) tai kirjoittaa linnun nimen alle:</p>
   <div id="options">
     <button onclick="checkAnswer(0)"></button>
     <button onclick="checkAnswer(1)"></button>
@@ -51,6 +56,7 @@
   <input type="text" id="answerInput" placeholder="Kirjoita linnun nimi ja paina Enter">
   <p id="result"></p>
   <p id="score"></p>
+  <p id="finalScore">Oikein: 0</p>
 
   <script>
     const birdSounds = {
@@ -104,6 +110,7 @@
     let index = 0;
     let shuffled = shuffle(birds);
     let correctAnswer = "";
+    let optionsShown = false;
 
     function shuffle(array) {
       for (let i = array.length - 1; i > 0; i--) {
@@ -115,7 +122,7 @@
 
     function loadNext() {
       if (index >= shuffled.length) {
-        document.getElementById('result').textContent = `Valmis! Sait ${score}/${shuffled.length} oikein.`;
+        document.getElementById('result').textContent = `Valmis!`;
         return;
       }
       correctAnswer = shuffled[index];
@@ -127,35 +134,44 @@
       for (let i = 0; i < 3; i++) {
         buttons[i].textContent = choices[i];
       }
+
       document.getElementById('result').textContent = '';
       document.getElementById('score').textContent = `Kysymys ${index + 1}/${shuffled.length}`;
       document.getElementById('answerInput').value = '';
-      document.getElementById('options').style.display = 'none'; // Hide again for next question
+      document.getElementById('options').style.display = 'none';
+      optionsShown = false;
     }
 
     function checkAnswer(selectedIndex) {
       const selected = document.getElementById('options').children[selectedIndex].textContent.toLowerCase();
-      validate(selected);
+      validate(selected, true);
     }
 
-    function validate(answer) {
+    function validate(answer, usedOptions = false) {
       if (answer === correctAnswer) {
         document.getElementById('result').textContent = 'WAUTSI HYVÄ!';
-        score++;
+        score += usedOptions ? 0.5 : 1;
       } else {
         document.getElementById('result').textContent = `Väärin! Oikea vastaus oli: ${correctAnswer}`;
       }
       index++;
+      updateScoreDisplay();
       setTimeout(loadNext, 1500);
     }
 
     function showOptions() {
       document.getElementById('options').style.display = 'block';
+      optionsShown = true;
+    }
+
+    function updateScoreDisplay() {
+      document.getElementById('finalScore').textContent = `Oikein: ${score}`;
     }
 
     document.getElementById('answerInput').addEventListener('keydown', function(e) {
       if (e.key === 'Enter') {
-        validate(this.value.trim().toLowerCase());
+        const answer = this.value.trim().toLowerCase();
+        validate(answer, optionsShown);
       }
     });
 
